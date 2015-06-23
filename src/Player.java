@@ -115,7 +115,7 @@ public class Player {
 			dirUD = -1;	//Black pieces go downward, represents one step downward
 
 		//Verifies if the pusher is going to fall off the board
-		if ((letter != Board.A || dirLR != LEFT) && (letter != Board.H || dirLR != RIGHT)){
+		if ((letter != Board.COLUMN_A || dirLR != LEFT) && (letter != Board.COLUMN_H || dirLR != RIGHT)){
 			
 			//Evaluates the next square in the chosen direction
 			switch (board.getSquareState(letter+dirLR, number+dirUD)){
@@ -157,7 +157,7 @@ public class Player {
 					 * 4) The square beyond the pushable must be either empty or on a diagonal (Pieces can't eat on a straight line) 
 					 */
 				} else if((isWhite == true) &&	// 1)
-						  (letter+dirLR != Board.A || dirLR != LEFT) && (letter+dirLR != Board.H || dirLR != RIGHT) &&	// 2)
+						  (letter+dirLR != Board.COLUMN_A || dirLR != LEFT) && (letter+dirLR != Board.COLUMN_H || dirLR != RIGHT) &&	// 2)
 						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != Square.W_PUSHER) &&	// 3)
 						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != Square.W_PUSHABLE) &&	// 3)
 						  ((board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) == Square.EMPTY) || (dirLR != CENTER))){	// 4)
@@ -185,7 +185,7 @@ public class Player {
 					 * 4) The square beyond the pushable must be either empty or on a diagonal (Pieces can't eat on a straight line) 
 					 */
 				} else if((isWhite == false) &&	// 1)
-						  (letter+dirLR != Board.A || dirLR != LEFT) && (letter+dirLR != Board.H || dirLR != RIGHT) &&	// 2)
+						  (letter+dirLR != Board.COLUMN_A || dirLR != LEFT) && (letter+dirLR != Board.COLUMN_H || dirLR != RIGHT) &&	// 2)
 						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != Square.B_PUSHER) &&	// 3)
 						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != Square.B_PUSHABLE) &&	// 3)
 						  ((board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) == Square.EMPTY) || (dirLR != CENTER))){	// 4)

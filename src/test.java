@@ -2,27 +2,27 @@ import java.awt.Point;
 import java.util.LinkedList;
 
 
-public class test {
+/*public class test {
 	
 	//Numbers associated with each column
-		public static final int A = Board.A;	//Leftmost column
-		public static final int B = Board.B;	
-		public static final int C = Board.C;	
-		public static final int D = Board.D;	
-		public static final int E = Board.E;	
-		public static final int F = Board.F;	
-		public static final int G = Board.G;	
-		public static final int H = Board.H;	//Rightmost column
+		public static final int A = Board.COLUMN_A;	//Leftmost column
+		public static final int B = Board.COLUMN_B;	
+		public static final int C = Board.COLUMN_C;	
+		public static final int D = Board.COLUMN_D;	
+		public static final int E = Board.COLUMN_E;	
+		public static final int F = Board.COLUMN_F;	
+		public static final int G = Board.COLUMN_G;	
+		public static final int H = Board.COLUMN_H;	//Rightmost column
 
 		//Numbers associated with each row
-		public static final int L1 = Board.L1;	//Bottom line
-		public static final int L2 = Board.L2;	
-		public static final int L3 = Board.L3;	
-		public static final int L4 = Board.L4;	
-		public static final int L5 = Board.L5;	
-		public static final int L6 = Board.L6;	
-		public static final int L7 = Board.L7;	
-		public static final int L8 = Board.L8;	//Top line
+		public static final int L1 = Board.ROW_1;	//Bottom line
+		public static final int L2 = Board.ROW_2;	
+		public static final int L3 = Board.ROW_3;	
+		public static final int L4 = Board.ROW_4;	
+		public static final int L5 = Board.ROW_5;	
+		public static final int L6 = Board.ROW_6;	
+		public static final int L7 = Board.ROW_7;	
+		public static final int L8 = Board.ROW_8;	//Top line
 
 	public static void main(String[] args) {
 		
@@ -56,4 +56,4 @@ public class test {
 
 	}
 
-}
+}*/

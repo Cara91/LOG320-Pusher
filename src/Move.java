@@ -63,14 +63,14 @@ public class Move {
 		
 		switch(letter){
 
-		case Board.A:	return "A";
-		case Board.B:	return "B";
-		case Board.C:	return "C";
-		case Board.D:	return "D";
-		case Board.E:	return "E";
-		case Board.F:	return "F";
-		case Board.G:	return "G";
-		case Board.H:	return "H";
+		case Board.COLUMN_A:	return "A";
+		case Board.COLUMN_B:	return "B";
+		case Board.COLUMN_C:	return "C";
+		case Board.COLUMN_D:	return "D";
+		case Board.COLUMN_E:	return "E";
+		case Board.COLUMN_F:	return "F";
+		case Board.COLUMN_G:	return "G";
+		case Board.COLUMN_H:	return "H";
 		default:	return "Error";
 		
 		}
@@ -80,14 +80,14 @@ public class Move {
 		
 		switch(number){
 
-		case Board.L1:	return "1";
-		case Board.L2:	return "2";
-		case Board.L3:	return "3";
-		case Board.L4:	return "4";
-		case Board.L5:	return "5";
-		case Board.L6:	return "6";
-		case Board.L7:	return "7";
-		case Board.L8:	return "8";
+		case Board.ROW_1:	return "1";
+		case Board.ROW_2:	return "2";
+		case Board.ROW_3:	return "3";
+		case Board.ROW_4:	return "4";
+		case Board.ROW_5:	return "5";
+		case Board.ROW_6:	return "6";
+		case Board.ROW_7:	return "7";
+		case Board.ROW_8:	return "8";
 		default:	return "Error";
 		
 		}
