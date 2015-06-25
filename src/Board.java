@@ -222,7 +222,7 @@ public class Board {
 		//Identifies the columns
 		System.out.println("  A B C D E F G H");
 
-		for(int i = ROW_1; i <= ROW_8; i++){
+		for(int i = ROW_8; i >= ROW_1; i--){
 
 			//Identifies the lines
 			System.out.print(i+1);
@@ -241,7 +241,7 @@ public class Board {
 		//Identifies the columns
 				System.out.println("  A B C D E F G H");
 
-				for(int i = ROW_1; i <= ROW_8; i++){
+				for(int i = ROW_8; i >= ROW_1; i--){
 
 					//Identifies the lines
 					System.out.print(i+1);

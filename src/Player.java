@@ -1,6 +1,9 @@
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
+
+import com.Pushers.Utils.BoardUtil;
 
 
 public class Player {
@@ -17,7 +20,7 @@ public class Player {
 	//True if the player is playing with the white team, false if not
 	private boolean isWhite;
 	//Updated list of the positions of the player's pushers
-	private LinkedList<Point> pusherList;
+	private List<Point> pusherList;
 
 
 	//CONSTRUCTOR
@@ -40,13 +43,13 @@ public class Player {
 	 * 
 	 * @return a list of all the possible moves
 	 */
-	public LinkedList<Move> getAllMoves(){
+	public List<Move> getAllMoves(){
 
 		//The list of all the moves
-		LinkedList<Move> moveList = new LinkedList<Move>();
+		List<Move> moveList = new ArrayList<Move>();
 
 		//The list of all the pushers, which are the only one creating motion
-		LinkedList<Point> pusherList = this.pusherList;
+		List<Point> pusherList = this.pusherList;
 
 		//Used to evaluate all pushers in the pusher list
 		Iterator<Point> itr = pusherList.iterator();
@@ -120,7 +123,7 @@ public class Player {
 			//Evaluates the next square in the chosen direction
 			switch (board.getSquareState(letter+dirLR, number+dirUD)){
 
-			case Square.W_PUSHER:
+			case BoardUtil.W_PUSHER:
 				
 				//To take a white pusher, the player needs to be black and needs to be going diagonally
 				if(isWhite == false && dirLR != CENTER){
@@ -130,7 +133,7 @@ public class Player {
 				
 				break;
 				
-			case Square.B_PUSHER:
+			case BoardUtil.B_PUSHER:
 				
 				//To take a black pusher, the player needs to be white and needs to be going diagonally
 				if(isWhite == true && dirLR != CENTER){
@@ -140,7 +143,7 @@ public class Player {
 				
 				break;
 				
-			case Square.W_PUSHABLE:
+			case BoardUtil.W_PUSHABLE:
 				
 				/* To take a white pushable, a pusher must meet those rules:
 				 * 1) The pusher must be black
@@ -158,9 +161,9 @@ public class Player {
 					 */
 				} else if((isWhite == true) &&	// 1)
 						  (letter+dirLR != Board.COLUMN_A || dirLR != LEFT) && (letter+dirLR != Board.COLUMN_H || dirLR != RIGHT) &&	// 2)
-						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != Square.W_PUSHER) &&	// 3)
-						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != Square.W_PUSHABLE) &&	// 3)
-						  ((board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) == Square.EMPTY) || (dirLR != CENTER))){	// 4)
+						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != BoardUtil.W_PUSHER) &&	// 3)
+						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != BoardUtil.W_PUSHABLE) &&	// 3)
+						  ((board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) == BoardUtil.EMPTY) || (dirLR != CENTER))){	// 4)
 					
 					//Moves the adjacent pushable piece one square in the same direction
 					move = new Move(letter+dirLR,number+dirUD,letter+(2*dirLR),number+(2*dirUD));	
@@ -168,7 +171,7 @@ public class Player {
 				
 				break;
 				
-			case Square.B_PUSHABLE:
+			case BoardUtil.B_PUSHABLE:
 				
 				/* To take a black pushable, a pusher must meet those rules:
 				 * 1) The pusher must be white
@@ -186,9 +189,9 @@ public class Player {
 					 */
 				} else if((isWhite == false) &&	// 1)
 						  (letter+dirLR != Board.COLUMN_A || dirLR != LEFT) && (letter+dirLR != Board.COLUMN_H || dirLR != RIGHT) &&	// 2)
-						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != Square.B_PUSHER) &&	// 3)
-						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != Square.B_PUSHABLE) &&	// 3)
-						  ((board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) == Square.EMPTY) || (dirLR != CENTER))){	// 4)
+						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != BoardUtil.B_PUSHER) &&	// 3)
+						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != BoardUtil.B_PUSHABLE) &&	// 3)
+						  ((board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) == BoardUtil.EMPTY) || (dirLR != CENTER))){	// 4)
 					
 					//Moves the adjacent pushable piece one square in the same direction
 					move = new Move(letter+dirLR,number+dirUD,letter+(2*dirLR),number+(2*dirUD));	

@@ -1,5 +1,7 @@
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 class Client {
@@ -28,7 +30,7 @@ class Client {
 				input.read(aBuffer,0,size);
 				
 				int column = 0;
-				int row = 0;
+				int row = 7;
 				for (int i = 1; i < size; i+=2) {
 					System.out.println(aBuffer[i]-48);
 					board[row][column] = (int) aBuffer[i] - 48;
@@ -36,7 +38,7 @@ class Client {
 					column++;
 					if(column == 8){
 						column = 0;
-						row++;
+						row--;
 					}
 				}
 
@@ -49,6 +51,20 @@ class Client {
 				Board board2 = new Board(board);
 				board2.printBoard();
 				
+				Player player = new Player(board2, false);
+				List<Move> mList = player.getAllMoves();
+				
+				int startingSize = mList.size();
+				
+				while(mList.isEmpty() == false){
+
+					if((startingSize - mList.size()) % 10 == 0)
+						System.out.println("");
+					
+					System.out.print(mList.get(0) + ", ");
+					mList.remove(mList.get(0));
+				}
+				
             }
             // Debut de la partie en joueur Noir
             if(cmd == '2'){
@@ -60,7 +76,7 @@ class Client {
 				input.read(aBuffer,0,size);
 				
 				int column = 0;
-				int row = 0;
+				int row = 7;
 				for (int i = 1; i < size; i+=2) {
 					System.out.println(aBuffer[i]-48);
 					board[row][column] = (int) aBuffer[i] - 48;
@@ -68,12 +84,23 @@ class Client {
 					column++;
 					if(column == 8){
 						column = 0;
-						row++;
+						row--;
 					}
 				}
 				
 				Board board2 = new Board(board);
 				board2.printBoard();
+				
+				Player player = new Player(board2, false);
+				List<Move> mList = player.getAllMoves();
+				
+				for (int i = 0; i < mList.size(); i++) {
+
+					if(i % 10 == 0)
+						System.out.println("");
+					
+					System.out.print(mList.get(0) + ", ");
+				}
             }
 
 

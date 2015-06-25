@@ -2,8 +2,8 @@ package com.Pushers.Utils;
 
 public class BoardUtil {
 	public static final int EMPTY = 0;
-	public static final int B_PUSHER = 1;
-	public static final int B_PUSHABLE = 2;
+	public static final int B_PUSHABLE = 1;
+	public static final int B_PUSHER = 2;
 	public static final int W_PUSHABLE = 3;
 	public static final int W_PUSHER = 4;
 	
