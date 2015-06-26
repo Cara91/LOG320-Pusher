@@ -32,7 +32,6 @@ class Client {
 				int column = 0;
 				int row = 7;
 				for (int i = 1; i < size; i+=2) {
-					System.out.println(aBuffer[i]-48);
 					board[row][column] = (int) aBuffer[i] - 48;
 					
 					column++;
@@ -51,18 +50,15 @@ class Client {
 				Board board2 = new Board(board);
 				board2.printBoard();
 				
-				Player player = new Player(board2, false);
+				Player player = new Player(board2, true);
 				List<Move> mList = player.getAllMoves();
 				
-				int startingSize = mList.size();
-				
-				while(mList.isEmpty() == false){
+				for (int i = 0; i < mList.size(); i++) {
 
-					if((startingSize - mList.size()) % 10 == 0)
+					if(i % 10 == 0)
 						System.out.println("");
 					
-					System.out.print(mList.get(0) + ", ");
-					mList.remove(mList.get(0));
+					System.out.print(mList.get(i) + ", ");
 				}
 				
             }
@@ -78,7 +74,6 @@ class Client {
 				int column = 0;
 				int row = 7;
 				for (int i = 1; i < size; i+=2) {
-					System.out.println(aBuffer[i]-48);
 					board[row][column] = (int) aBuffer[i] - 48;
 					
 					column++;
@@ -99,7 +94,7 @@ class Client {
 					if(i % 10 == 0)
 						System.out.println("");
 					
-					System.out.print(mList.get(0) + ", ");
+					System.out.print(mList.get(i) + ", ");
 				}
             }
 

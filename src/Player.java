@@ -35,7 +35,6 @@ public class Player {
 		} else {
 			pusherList = board.getListBPushers();
 		}
-
 	}
 
 	/**
@@ -51,11 +50,7 @@ public class Player {
 		//The list of all the pushers, which are the only one creating motion
 		List<Point> pusherList = this.pusherList;
 
-		//Used to evaluate all pushers in the pusher list
-		Iterator<Point> itr = pusherList.iterator();
-
-		//As long as there is unevaluated pusher(s)
-		while(itr.hasNext()){
+		for (int i = 0; i < pusherList.size(); i++) {
 
 			/* Creates the table that will contain all the moves for that pusher
 			 * There is a maximum of three moves a pusher can do, either it moves N, NW or NE,
@@ -65,19 +60,19 @@ public class Player {
 			Move[] moveTab = new Move[3];
 
 			//Gets the position of the pusher
-			Point point = itr.next();
+			Point point = pusherList.get(i);
 
 			//Gets an array of moves for that particular pusher
 			moveTab = getMoves(point.x,point.y);
 
 			//For every moves the pusher can do
-			for (int i = 0; i < moveTab.length; i++){
+			for (int j = 0; j < moveTab.length; j++){
 
 				//If the move exists
-				if (moveTab[i] != null){
+				if (moveTab[j] != null){
 
 					//Adds the move to the list of all moves possible
-					moveList.add(moveTab[i]);
+					moveList.add(moveTab[j]);
 				}
 			}
 		}
@@ -85,26 +80,27 @@ public class Player {
 		return moveList;
 	}
 
-	private Move[] getMoves(int letter, int number){
+	private Move[] getMoves(int row, int column){
 
 		Move[] moveTab = new Move[3];
 
-		moveTab[0] = lookAhead(letter, number, LEFT);
-		moveTab[1] = lookAhead(letter, number, CENTER);
-		moveTab[2] = lookAhead(letter, number, RIGHT);
+		moveTab[0] = lookAhead(row, column, LEFT);
+		moveTab[1] = lookAhead(row, column, CENTER);
+		moveTab[2] = lookAhead(row, column, RIGHT);
 
 		return moveTab;
 	}
 
+
 	/**
 	 * Verifies if the pusher on the square can make a move (move or push) towards the left side of the board.
 	 * 
-	 * @param letter	The first coordinate of the square
-	 * @param number	The second coordinate of the square
+	 * @param row	The first coordinate of the square
+	 * @param column	The second coordinate of the square
 	 * @param dirLR		Used to know if the pusher is going left or right (it represents one step in said direction)
 	 * @return	The move that can be made, or null if no move can be made
 	 */
-	private Move lookAhead(int letter, int number, int dirLR){
+	private Move lookAhead(int row, int column, int dirLR){
 
 		//The possible move in the chosen direction
 		Move move = null;
@@ -118,17 +114,17 @@ public class Player {
 			dirUD = -1;	//Black pieces go downward, represents one step downward
 
 		//Verifies if the pusher is going to fall off the board
-		if ((letter != Board.COLUMN_A || dirLR != LEFT) && (letter != Board.COLUMN_H || dirLR != RIGHT)){
+		if ((column != Board.COLUMN_A || dirLR != LEFT) && (column != Board.COLUMN_H || dirLR != RIGHT)){
 			
 			//Evaluates the next square in the chosen direction
-			switch (board.getSquareState(letter+dirLR, number+dirUD)){
+			switch (board.getSquareState(row+dirUD, column+dirLR)){
 
 			case BoardUtil.W_PUSHER:
 				
 				//To take a white pusher, the player needs to be black and needs to be going diagonally
 				if(isWhite == false && dirLR != CENTER){
 					//Creates the move to take the white pusher
-					move = new Move(letter,number,letter+dirLR,number+dirUD);
+					move = new Move(row,column,row+dirUD,column+dirLR);
 				}
 				
 				break;
@@ -138,7 +134,7 @@ public class Player {
 				//To take a black pusher, the player needs to be white and needs to be going diagonally
 				if(isWhite == true && dirLR != CENTER){
 					//Creates the move to take the black pusher
-					move = new Move(letter,number,letter+dirLR,number+dirUD);
+					move = new Move(row,column,row+dirUD,column+dirLR);
 				}
 				
 				break;
@@ -151,7 +147,7 @@ public class Player {
 				 */
 				if((isWhite == false) && (dirLR != CENTER)){
 					
-					move = new Move(letter,number,letter+dirLR,number+dirUD);
+					move = new Move(row,column,row+dirUD,column+dirLR);
 					
 					/*	To be allowed to push a white pushable, a pusher must meet those rules:
 					 * 1) The pusher must be white
@@ -160,13 +156,13 @@ public class Player {
 					 * 4) The square beyond the pushable must be either empty or on a diagonal (Pieces can't eat on a straight line) 
 					 */
 				} else if((isWhite == true) &&	// 1)
-						  (letter+dirLR != Board.COLUMN_A || dirLR != LEFT) && (letter+dirLR != Board.COLUMN_H || dirLR != RIGHT) &&	// 2)
-						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != BoardUtil.W_PUSHER) &&	// 3)
-						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != BoardUtil.W_PUSHABLE) &&	// 3)
-						  ((board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) == BoardUtil.EMPTY) || (dirLR != CENTER))){	// 4)
+						  (column+dirLR != Board.COLUMN_A || dirLR != LEFT) && (column+dirLR != Board.COLUMN_H || dirLR != RIGHT) &&	// 2)
+						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtil.W_PUSHER) &&	// 3)
+						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtil.W_PUSHABLE) &&	// 3)
+						  ((board.getSquareState(row+(2*dirUD),column+(2*dirLR)) == BoardUtil.EMPTY) || (dirLR != CENTER))){	// 4)
 					
 					//Moves the adjacent pushable piece one square in the same direction
-					move = new Move(letter+dirLR,number+dirUD,letter+(2*dirLR),number+(2*dirUD));	
+					move = new Move(row+dirUD,column+dirLR,row+(2*dirUD),column+(2*dirLR));	
 				}
 				
 				break;
@@ -179,7 +175,7 @@ public class Player {
 				 */
 				if((isWhite == true) && (dirLR != CENTER)){
 					
-					move = new Move(letter,number,letter+dirLR,number+dirUD);
+					move = new Move(row,column,row+dirUD,column+dirLR);
 					
 					/*	To be allowed to push a black pushable, a pusher must meet those rules:
 					 * 1) The pusher must be black
@@ -188,20 +184,20 @@ public class Player {
 					 * 4) The square beyond the pushable must be either empty or on a diagonal (Pieces can't eat on a straight line) 
 					 */
 				} else if((isWhite == false) &&	// 1)
-						  (letter+dirLR != Board.COLUMN_A || dirLR != LEFT) && (letter+dirLR != Board.COLUMN_H || dirLR != RIGHT) &&	// 2)
-						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != BoardUtil.B_PUSHER) &&	// 3)
-						  (board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) != BoardUtil.B_PUSHABLE) &&	// 3)
-						  ((board.getSquareState(letter+(2*dirLR),number+(2*dirUD)) == BoardUtil.EMPTY) || (dirLR != CENTER))){	// 4)
+						  (column+dirLR != Board.COLUMN_A || dirLR != LEFT) && (column+dirLR != Board.COLUMN_H || dirLR != RIGHT) &&	// 2)
+						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtil.B_PUSHER) &&	// 3)
+						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtil.B_PUSHABLE) &&	// 3)
+						  ((board.getSquareState(row+(2*dirUD),column+(2*dirLR)) == BoardUtil.EMPTY) || (dirLR != CENTER))){	// 4)
 					
 					//Moves the adjacent pushable piece one square in the same direction
-					move = new Move(letter+dirLR,number+dirUD,letter+(2*dirLR),number+(2*dirUD));	
+					move = new Move(row+dirUD,column+dirLR,row+(2*dirUD),column+(2*dirLR));	
 				}
 				
 				break;
 				
 			default:
 				//If the space is empty, the player can move there
-				move = new Move(letter,number,letter+dirLR,number+dirUD);
+				move = new Move(row,column,row+dirUD,column+dirLR);
 
 			}
 		}

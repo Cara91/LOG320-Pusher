@@ -49,8 +49,6 @@ public class Board {
 		listBlackPushers = new ArrayList<Point>(8);
 		listWhitePushers = new ArrayList<Point>(8);
 		
-		System.out.println(listBlackPushers);
-		
 		setListPusher();
 	}
 
@@ -62,10 +60,8 @@ public class Board {
 				if(BoardUtil.isAPusher(this.board[i][j])){
 					
 					if(BoardUtil.isWhite(this.board[i][j])){
-						//listWhitePushers.add(new Point(i,ROW_1));
 						listWhitePushers.add(new Point(i, j));
 					} else {
-						//listBlackPushers.add(new Point(i,ROW_1));
 						listBlackPushers.add(new Point(i, j));
 					}
 				} else if(BoardUtil.isEmpty(this.board[i][j]) == false){
@@ -80,12 +76,12 @@ public class Board {
 		}
 	}
 
-	public int getSquareState(int column, int row){
-		return board[column][row];
+	public int getSquareState(int row, int column){
+		return board[row][column];
 	}
 
-	public void setSquareState(int column, int row, int newState){
-		board[column][row] = newState;
+	public void setSquareState(int row, int column, int newState){
+		board[row][column] = newState;
 	}
 	
 	/**
@@ -142,25 +138,25 @@ public class Board {
 		return listWhitePushers;
 	}
 	
-	public void movePiece(int fromColumn, int fromRow, int toColumn, int toRow){
+	public void movePiece(int fromRow, int fromColumn, int toRow, int toColumn){
 		//Updates the position of the pusher in the appropriate list
-		int state = board[fromColumn][fromRow];
+		int state = board[fromRow][fromColumn];
 		
 		if (state != BoardUtil.EMPTY){		
-			removePiece(fromColumn, fromRow);
+			removePiece(fromRow, fromColumn);
 				
-			removePiece(toColumn, toRow);
+			removePiece(toRow, toColumn);
 
-			addPiece(state, toColumn, toRow);
+			addPiece(state, toRow, toColumn);
 		}	
 	}
 	
-	private void addPiece(int state, int column, int row){
+	private void addPiece(int state, int row, int column){
 
 		//The current square being filled
-		board[column][row] = state;
+		board[row][column] = state;
 		//The position of the square
-		Point point = new Point(column, row);
+		Point point = new Point(row, column);
 
 		//Update of the correct list if the new piece is a pusher
 
@@ -183,12 +179,12 @@ public class Board {
 		}
 	}
 	
-	private void removePiece(int column, int row){
+	private void removePiece(int row, int column){
 		
 		//The current square being emptied
-		int square = board[column][row];
+		int square = board[row][column];
 		//The position of the square
-		Point point = new Point(column, row);
+		Point point = new Point(row, column);
 		
 		//If the square isn't already empty
 		if (BoardUtil.isEmpty(square) == false){
@@ -213,7 +209,7 @@ public class Board {
 				
 			}
 		
-			board[column][row] = BoardUtil.EMPTY;		
+			board[row][column] = BoardUtil.EMPTY;		
 		}		
 	}
 

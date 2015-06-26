@@ -1,60 +1,60 @@
 
 public class Move {
 
-	private int fromLetter;
-	private int fromNumber;
-	private int toLetter;
-	private int toNumber;
+	private int fromRow;
+	private int fromColumn;
+	private int toRow;
+	private int toColumn;
 	
-	public Move(int fromLetter, int fromNumber, int toLetter, int toNumber){
+	public Move(int fromRow, int fromColumn, int toRow, int toColumn){
 		
-		this.fromLetter = fromLetter;
-		this.fromNumber = fromNumber;
-		this.toLetter = toLetter;
-		this.toNumber = toNumber;
+		this.fromRow = fromRow;
+		this.fromColumn = fromColumn;
+		this.toRow = toRow;
+		this.toColumn = toColumn;
 		
 	}
 
 	public int getFromLetter() {
-		return fromLetter;
+		return fromRow;
 	}
 
 	public void setFromLetter(int fromLetter) {
-		this.fromLetter = fromLetter;
+		this.fromRow = fromLetter;
 	}
 
 	public int getFromNumber() {
-		return fromNumber;
+		return fromColumn;
 	}
 
 	public void setFromNumber(int fromNumber) {
-		this.fromNumber = fromNumber;
+		this.fromColumn = fromNumber;
 	}
 
 	public int getToLetter() {
-		return toLetter;
+		return toRow;
 	}
 
 	public void setToLetter(int toLetter) {
-		this.toLetter = toLetter;
+		this.toRow = toLetter;
 	}
 
 	public int getToNumber() {
-		return toNumber;
+		return toColumn;
 	}
 
 	public void setToNumber(int toNumber) {
-		this.toNumber = toNumber;
+		this.toColumn = toNumber;
 	}
 	
 	public String toString(){
 		
 		String str = new String();
 
-		str = str.concat(getLetterString(fromLetter));
-		str = str.concat(getNumberString(fromNumber));
-		str = str.concat(getLetterString(toLetter));
-		str = str.concat(getNumberString(toNumber));
+		str = str.concat(getLetterString(fromColumn));
+		str = str.concat(getNumberString(fromRow));
+		str = str.concat(getLetterString(toColumn));
+		str = str.concat(getNumberString(toRow));
 		
 		return str;
 	}
