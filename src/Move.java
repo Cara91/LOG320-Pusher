@@ -14,37 +14,46 @@ public class Move {
 		this.toColumn = toColumn;
 		
 	}
+	
+	public Move(int fromRow, char fromColumn, int toRow, char toColumn){
+		
+		this.fromRow = fromRow;
+		this.fromColumn = getColumnNumber(fromColumn);
+		this.toRow = toRow;
+		this.toColumn = getColumnNumber(toColumn);
+		
+	}
 
-	public int getFromLetter() {
+	public int getFromRow() {
 		return fromRow;
 	}
 
-	public void setFromLetter(int fromLetter) {
-		this.fromRow = fromLetter;
+	public void setFromRow(int fromRow) {
+		this.fromRow = fromRow;
 	}
 
-	public int getFromNumber() {
+	public int getFromColumn() {
 		return fromColumn;
 	}
 
-	public void setFromNumber(int fromNumber) {
-		this.fromColumn = fromNumber;
+	public void setFromColumn(int fromColumn) {
+		this.fromColumn = fromColumn;
 	}
 
-	public int getToLetter() {
+	public int getToRow() {
 		return toRow;
 	}
 
-	public void setToLetter(int toLetter) {
-		this.toRow = toLetter;
+	public void setToRow(int toRow) {
+		this.toRow = toRow;
 	}
 
-	public int getToNumber() {
+	public int getToColumn() {
 		return toColumn;
 	}
 
-	public void setToNumber(int toNumber) {
-		this.toColumn = toNumber;
+	public void setToColumn(int toColumn) {
+		this.toColumn = toColumn;
 	}
 	
 	public String toString(){
@@ -53,10 +62,28 @@ public class Move {
 
 		str = str.concat(getLetterString(fromColumn));
 		str = str.concat(getNumberString(fromRow));
+		str = str.concat(" - ");
 		str = str.concat(getLetterString(toColumn));
 		str = str.concat(getNumberString(toRow));
 		
 		return str;
+	}
+	
+	private int getColumnNumber(char letter){
+		
+		switch(letter){
+
+		case 'A':	return Board.COLUMN_A;
+		case 'B':	return Board.COLUMN_B;
+		case 'C':	return Board.COLUMN_C;
+		case 'D':	return Board.COLUMN_D;
+		case 'E':	return Board.COLUMN_E;
+		case 'F':	return Board.COLUMN_F;
+		case 'G':	return Board.COLUMN_G;
+		case 'H':	return Board.COLUMN_H;
+		default:	return -1;
+		
+		}
 	}
 	
 	private String getLetterString(int letter){
