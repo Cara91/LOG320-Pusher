@@ -1,11 +1,18 @@
+package com.Pushers.Bean;
 
-public class Move {
+public class Move implements Comparable<Move>{
+
+    public static final int LEFT = -1;
+    public static final int CENTER = 0;
+    public static final int RIGHT = 1;
 
 	private int fromRow;
 	private int fromColumn;
 	private int toRow;
 	private int toColumn;
-	
+    private int score;
+
+
 	public Move(int fromRow, int fromColumn, int toRow, int toColumn){
 		
 		this.fromRow = fromRow;
@@ -14,15 +21,16 @@ public class Move {
 		this.toColumn = toColumn;
 		
 	}
-	
-	public Move(int fromRow, char fromColumn, int toRow, char toColumn){
-		
-		this.fromRow = fromRow;
-		this.fromColumn = getColumnNumber(fromColumn);
-		this.toRow = toRow;
-		this.toColumn = getColumnNumber(toColumn);
-		
-	}
+
+    public Move(int fromRow, int fromColumn, int toRow, int toColumn, int score){
+
+        this.fromRow = fromRow;
+        this.fromColumn = fromColumn;
+        this.toRow = toRow;
+        this.toColumn = toColumn;
+        this.score = score;
+
+    }
 
 	public int getFromRow() {
 		return fromRow;
@@ -55,6 +63,14 @@ public class Move {
 	public void setToColumn(int toColumn) {
 		this.toColumn = toColumn;
 	}
+
+    public int getScore(){
+        return this.score;
+    }
+
+    public void setScore(int score){
+        this.score = score;
+    }
 	
 	public String toString(){
 		
@@ -68,23 +84,8 @@ public class Move {
 		
 		return str;
 	}
-	
-	private int getColumnNumber(char letter){
-		
-		switch(letter){
 
-		case 'A':	return Board.COLUMN_A;
-		case 'B':	return Board.COLUMN_B;
-		case 'C':	return Board.COLUMN_C;
-		case 'D':	return Board.COLUMN_D;
-		case 'E':	return Board.COLUMN_E;
-		case 'F':	return Board.COLUMN_F;
-		case 'G':	return Board.COLUMN_G;
-		case 'H':	return Board.COLUMN_H;
-		default:	return -1;
-		
-		}
-	}
+
 	
 	private String getLetterString(int letter){
 		
@@ -119,5 +120,19 @@ public class Move {
 		
 		}
 	}
-	
+
+    public void calculateScore(){
+        this.score = (int)(Math.random()*1000);
+    }
+
+    @Override
+    public int compareTo(Move move){
+        if(this.score == move.getScore()){
+            return 0;
+        }else if(this.score > move.getScore()){
+            return 1;
+        }else{
+            return -1;
+        }
+    }
 }

@@ -1,3 +1,4 @@
+package com.Pushers.Bean;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class Board {
 
 	public static final int MAX_SQUARE = 8;
 	
-	private int[][] board;
+	private int[][] board = new int[8][8];
 	
 	private List<Point> listBlackPushers;
 	private List<Point> listWhitePushers;
@@ -37,20 +38,27 @@ public class Board {
 	private int nbBlackPushables;
 	private int nbWhitePushables;
 
-	/**
-	 * Creates a board in a requested arrangement
-	 * 
-	 * @param board	Array of integers, representing the state of each square
-	 */
-	public Board(int[][] board){
+    public Board(){
+    }
 
-		this.board = board;
-		
-		listBlackPushers = new ArrayList<Point>(8);
-		listWhitePushers = new ArrayList<Point>(8);
-		
-		setListPusher();
-	}
+    public Board(int size, byte[] byteTable){
+        int column = 0;
+        int row = 7;
+        for (int i = 1; i < size; i+=2) {
+            this.board[row][column] = (int) byteTable[i] - 48;
+
+            column++;
+            if(column == 8){
+                column = 0;
+                row--;
+            }
+        }
+
+        listBlackPushers = new ArrayList<Point>(8);
+        listWhitePushers = new ArrayList<Point>(8);
+
+        setListPusher();
+    }
 
 	private void setListPusher() {
 		for(int i = COLUMN_A; i <= COLUMN_H; i++){
@@ -137,18 +145,30 @@ public class Board {
 	public List<Point> getListWPushers(){
 		return listWhitePushers;
 	}
-	
-	public void movePiece(int fromRow, int fromColumn, int toRow, int toColumn){
-		//Updates the position of the pusher in the appropriate list
-		int state = board[fromRow][fromColumn];
-		
-		if (state != BoardUtil.EMPTY){		
-			removePiece(fromRow, fromColumn);
-				
-			removePiece(toRow, toColumn);
 
-			addPiece(state, toRow, toColumn);
-		}	
+    public void setBoard(int[][] board){
+        this.board = board;
+    }
+
+    public int[][] getBoard(){
+        return this.board;
+    }
+
+    public void undoMove(Move move, int stateFrom, int stateTo){
+
+        removePiece(move.getToRow(), move.getToColumn());
+        addPiece(stateFrom, move.getFromRow(), move.getFromColumn());
+        if(stateTo != BoardUtil.EMPTY){
+            addPiece(stateTo, move.getToRow(), move.getToColumn());
+        }
+    }
+
+	public void movePiece(Move move){
+		int state = board[move.getFromRow()][move.getFromColumn()];
+
+        removePiece(move.getFromRow(), move.getFromColumn());
+        removePiece(move.getToRow(), move.getToColumn());
+        addPiece(state, move.getToRow(), move.getToColumn());
 	}
 	
 	private void addPiece(int state, int row, int column){
