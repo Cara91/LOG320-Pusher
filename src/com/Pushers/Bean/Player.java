@@ -25,12 +25,12 @@ public class Player {
     }
 
     private Move minMaxAlphaBeta(Move move, boolean max, int depth, int alpha, int beta){
-        if(depth == 3){
-            move.calculateScore();
+        if(depth == 4){
+            move.setScore(board.calculateScore(this.isWhite));
             return move;
         }
         if(max){
-            System.out.println("Max");
+            //System.out.println("Max");
             Move maxMove = new Move(0,0,0,0, -9999);
             List<Move> moveList = getAllMoves(this.isWhite);
             int actualAlpha = -9999;
@@ -43,7 +43,7 @@ public class Player {
                 tempMove.setScore(minMaxAlphaBeta(moveList.get(i), false, depth + 1,Math.max(actualAlpha, alpha), beta).getScore());
                 //System.out.println("max:"+maxMove.getScore()+" | current:"+minMove.getScore());
                 if(maxMove.compareTo(tempMove) == -1){
-                    System.out.println("Changed Max to:"+tempMove.getScore());
+                    //System.out.println("Changed Max to:"+tempMove.getScore());
                     actualAlpha = tempMove.getScore();
                     maxMove = tempMove;
                 }
@@ -51,13 +51,13 @@ public class Player {
                 this.board.undoMove(tempMove, stateFrom, stateTo);
 
                 if(actualAlpha >= beta){
-                    System.out.println("actualAlpha:"+actualAlpha+" >= beta:"+beta);
+                    //System.out.println("actualAlpha:"+actualAlpha+" >= beta:"+beta);
                     return maxMove;
                 }
             }
             return maxMove;
         }else {
-            System.out.println("Min");
+            //System.out.println("Min");
             Move minMove = new Move(0,0,0,0, 9999);
             List<Move> moveList = getAllMoves(!this.isWhite);
             int actualBeta = 9999;
@@ -70,14 +70,14 @@ public class Player {
                 tempMove.setScore(minMaxAlphaBeta(moveList.get(i), true, depth + 1,alpha, Math.min(actualBeta, beta)).getScore());
                 //System.out.println("min:"+minMove.getScore()+" | current:"+maxMove.getScore());
                 if(minMove.compareTo(tempMove) == 1){
-                    System.out.println("Changed Min to:"+tempMove.getScore());
+                    //System.out.println("Changed Min to:"+tempMove.getScore());
                     actualBeta = tempMove.getScore();
                     minMove = tempMove;
                 }
 
                 this.board.undoMove(tempMove, stateFrom, stateTo);
                 if(actualBeta<=alpha){
-                    System.out.println("actualBeta:"+actualBeta+" <= alpha:"+alpha);
+                    //System.out.println("actualBeta:"+actualBeta+" <= alpha:"+alpha);
                     return minMove;
                 }
             }
@@ -108,7 +108,7 @@ public class Player {
 		}
 		return moveList;
 	}
-
+    //checker move pour si on est au bout
 	private Move[] getMoves(int row, int column, boolean isWhite){
         Move[] moveTab = new Move[3];
 		moveTab[0] = lookAhead(row, column, Move.LEFT, isWhite);

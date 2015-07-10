@@ -121,10 +121,6 @@ public class Move implements Comparable<Move>{
 		}
 	}
 
-    public void calculateScore(){
-        this.score = (int)(Math.random()*1000);
-    }
-
     @Override
     public int compareTo(Move move){
         if(this.score == move.getScore()){

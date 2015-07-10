@@ -27,13 +27,15 @@ class Client {
 		MyClient = new Socket("localhost", 8888);
 	   	input    = new BufferedInputStream(MyClient.getInputStream());
 		output   = new BufferedOutputStream(MyClient.getOutputStream());
-		BufferedReader console = new BufferedReader(new InputStreamReader(System.in));  
-				
-	   	while(1 == 1){
+		BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        long start;
+        long end=0;
+        while(1 == 1){
+
 			char cmd = 0;
 		   	
             cmd = (char)input.read();
-            		
+            start = System.currentTimeMillis();
             // Debut de la partie en joueur blanc
             if(cmd == '1'){
                 byte[] aBuffer = new byte[1024];
@@ -47,6 +49,7 @@ class Client {
                 String moveString = move.toString();
 				output.write(moveString.getBytes(),0,moveString.length());
 				output.flush();
+
 
 				board.movePiece(move);
             }
@@ -105,8 +108,10 @@ class Client {
 				board.movePiece(moveList.get(random));
 				*/
 			}
-			
+            end = System.currentTimeMillis();
+
 			board.printBoard();
+            System.out.println("Turn time: "+(end-start)+"ms");
         }
 	}
 	catch (IOException e) {

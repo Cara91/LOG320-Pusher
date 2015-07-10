@@ -273,4 +273,47 @@ public class Board {
 				//Identifies the columns
 				System.out.println("  A B C D E F G H");
 	}
+
+    public int calculateScore(boolean isWhite){
+        int moveScore = 0;
+        if(isWhite){
+            moveScore += calculatePushableScore();
+            moveScore += calculateWhitePusher();
+            moveScore -= calculateBlackPusher();
+            //System.out.println("White:"+moveScore);
+        }else{
+            moveScore -= calculatePushableScore();
+            moveScore -= calculateWhitePusher();
+            moveScore += calculateBlackPusher();
+            //System.out.println("Black:"+moveScore);
+        }
+        return moveScore;
+    }
+
+    private int calculatePushableScore(){
+        return this.getNbWPushables()*10 - this.getNbBPushables()*10;
+    }
+
+    private int calculateBlackPusher(){
+        int score=0;
+        for (int i=0; i<this.listBlackPushers.size(); i++ ){
+            Point tempPoint = this.listBlackPushers.get(i);
+            //voir ce qui est autour de ce pusher
+            int kkk = this.board[tempPoint.x][tempPoint.y];
+            score += (Math.pow((7 - tempPoint.y),2)*10);
+            score += 100;
+        }
+        return score;
+    }
+
+    private int calculateWhitePusher(){
+        int score=0;
+        for (int i=0; i<this.listWhitePushers.size(); i++ ){
+            Point tempPoint = this.listWhitePushers.get(i);
+            score += (Math.pow(tempPoint.y,2)*10);
+            score += 100;
+        }
+        return score;
+    }
+
 }
