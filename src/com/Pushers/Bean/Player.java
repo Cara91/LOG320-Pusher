@@ -121,6 +121,10 @@ public class Player {
         Move move = null;
 		int dirUD;
 
+        if((row == 0 && !isWhite) || (row == 7 && isWhite)){
+            return null;
+        }
+
 		if (isWhite)
 			dirUD = 1;
 		else
