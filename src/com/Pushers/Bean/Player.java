@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.Pushers.Utils.BoardUtil;
+import com.Pushers.Utils.BoardUtils;
 
 
 public class Player {
@@ -133,39 +133,39 @@ public class Player {
 		if ((column != Board.COLUMN_A || dirLR != Move.LEFT) && (column != Board.COLUMN_H || dirLR != Move.RIGHT)){
 			switch (board.getSquareState(row+dirUD, column+dirLR)){
 
-			case BoardUtil.W_PUSHER:
+			case BoardUtils.W_PUSHER:
 				if(isWhite == false && dirLR != Move.CENTER){
 					move = new Move(row,column,row+dirUD,column+dirLR);
 				}
 				
 				break;
 				
-			case BoardUtil.B_PUSHER:
+			case BoardUtils.B_PUSHER:
 				if(isWhite == true && dirLR != Move.CENTER){
 					move = new Move(row,column,row+dirUD,column+dirLR);
 				}
 				break;
 				
-			case BoardUtil.W_PUSHABLE:
+			case BoardUtils.W_PUSHABLE:
 				if((isWhite == false) && (dirLR != Move.CENTER)){
 					move = new Move(row,column,row+dirUD,column+dirLR);
 				} else if((isWhite == true) &&	// 1)
 						  (column+dirLR != Board.COLUMN_A || dirLR != Move.LEFT) && (column+dirLR != Board.COLUMN_H || dirLR != Move.RIGHT) &&	// 2)
-						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtil.W_PUSHER) &&	// 3)
-						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtil.W_PUSHABLE) &&	// 3)
-						  ((board.getSquareState(row+(2*dirUD),column+(2*dirLR)) == BoardUtil.EMPTY) || (dirLR != Move.CENTER))){	// 4)
+						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtils.W_PUSHER) &&	// 3)
+						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtils.W_PUSHABLE) &&	// 3)
+						  ((board.getSquareState(row+(2*dirUD),column+(2*dirLR)) == BoardUtils.EMPTY) || (dirLR != Move.CENTER))){	// 4)
 					move = new Move(row+dirUD,column+dirLR,row+(2*dirUD),column+(2*dirLR));	
 				}
 				break;
 				
-			case BoardUtil.B_PUSHABLE:
+			case BoardUtils.B_PUSHABLE:
 				if((isWhite == true) && (dirLR != Move.CENTER)){
 					move = new Move(row,column,row+dirUD,column+dirLR);
 				} else if((isWhite == false) &&	// 1)
 						  (column+dirLR != Board.COLUMN_A || dirLR != Move.LEFT) && (column+dirLR != Board.COLUMN_H || dirLR != Move.RIGHT) &&	// 2)
-						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtil.B_PUSHER) &&	// 3)
-						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtil.B_PUSHABLE) &&	// 3)
-						  ((board.getSquareState(row+(2*dirUD),column+(2*dirLR)) == BoardUtil.EMPTY) || (dirLR != Move.CENTER))){	// 4)
+						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtils.B_PUSHER) &&	// 3)
+						  (board.getSquareState(row+(2*dirUD),column+(2*dirLR)) != BoardUtils.B_PUSHABLE) &&	// 3)
+						  ((board.getSquareState(row+(2*dirUD),column+(2*dirLR)) == BoardUtils.EMPTY) || (dirLR != Move.CENTER))){	// 4)
 					move = new Move(row+dirUD,column+dirLR,row+(2*dirUD),column+(2*dirLR));	
 				}
 				break;

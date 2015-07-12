@@ -2,10 +2,10 @@ package com.Pushers.Bean;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-import com.Pushers.Utils.BoardUtil;
+import com.Pushers.Utils.BoardUtils;
+import com.Pushers.Utils.HeuristicUtils;
 
 
 public class Board {
@@ -34,9 +34,11 @@ public class Board {
 	
 	private List<Point> listBlackPushers;
 	private List<Point> listWhitePushers;
+    private List<Point> listBlackPushables;
+    private List<Point> listWhitePushables;
 	
-	private int nbBlackPushables;
-	private int nbWhitePushables;
+	//private int nbBlackPushables;
+	//private int nbWhitePushables;
 
     public Board(){
     }
@@ -56,6 +58,8 @@ public class Board {
 
         listBlackPushers = new ArrayList<Point>(8);
         listWhitePushers = new ArrayList<Point>(8);
+        listBlackPushables = new ArrayList<Point>(8);
+        listWhitePushables = new ArrayList<Point>(8);
 
         setListPusher();
     }
@@ -65,19 +69,21 @@ public class Board {
 			
 			for(int j = ROW_1; j <= ROW_8; j++){
 
-				if(BoardUtil.isAPusher(this.board[i][j])){
+				if(BoardUtils.isAPusher(this.board[i][j])){
 					
-					if(BoardUtil.isWhite(this.board[i][j])){
+					if(BoardUtils.isWhite(this.board[i][j])){
 						listWhitePushers.add(new Point(i, j));
 					} else {
 						listBlackPushers.add(new Point(i, j));
 					}
-				} else if(BoardUtil.isEmpty(this.board[i][j]) == false){
+				} else if(BoardUtils.isEmpty(this.board[i][j]) == false){
 					
-					if(BoardUtil.isWhite(this.board[i][j])){
-						nbWhitePushables++;
+					if(BoardUtils.isWhite(this.board[i][j])){
+                        listWhitePushables.add(new Point(i, j));
+						//nbWhitePushables++;
 					} else {
-						nbBlackPushables++;
+                        listBlackPushables.add(new Point(i, j));
+						//nbBlackPushables++;
 					}
 				}
 			}
@@ -111,24 +117,6 @@ public class Board {
 	}
 	
 	/**
-	 * Returns the number of black pushable on the board
-	 * 
-	 * @return	The number of black pushable
-	 */
-	public int getNbBPushables(){
-		return nbBlackPushables;
-	}
-	
-	/**
-	 * Returns the number of white pushable on the board
-	 * 
-	 * @return	The number of white pushable
-	 */
-	public int getNbWPushables(){
-		return nbWhitePushables;
-	}
-	
-	/**
 	 * Returns a copy of the list containing the positions of every black pushers 
 	 * 
 	 * @return	A copy of the list
@@ -158,7 +146,7 @@ public class Board {
 
         removePiece(move.getToRow(), move.getToColumn());
         addPiece(stateFrom, move.getFromRow(), move.getFromColumn());
-        if(stateTo != BoardUtil.EMPTY){
+        if(stateTo != BoardUtils.EMPTY){
             addPiece(stateTo, move.getToRow(), move.getToColumn());
         }
     }
@@ -180,22 +168,24 @@ public class Board {
 
 		//Update of the correct list if the new piece is a pusher
 
-		if (state == BoardUtil.W_PUSHER){
+		if (state == BoardUtils.W_PUSHER){
 			listWhitePushers.add(point);
 		}
 
-		if (state == BoardUtil.B_PUSHER){
+		if (state == BoardUtils.B_PUSHER){
 			listBlackPushers.add(point);
 		}
 
 		//If the added piece is a pushable
 
-		if (state == BoardUtil.W_PUSHABLE){
-			nbWhitePushables++;
+		if (state == BoardUtils.W_PUSHABLE){
+            listWhitePushables.add(point);
+			//nbWhitePushables++;
 		}
 
-		if (state == BoardUtil.B_PUSHABLE){
-			nbBlackPushables++;
+		if (state == BoardUtils.B_PUSHABLE){
+            listBlackPushables.add(point);
+			//nbBlackPushables++;
 		}
 	}
 	
@@ -207,12 +197,12 @@ public class Board {
 		Point point = new Point(row, column);
 		
 		//If the square isn't already empty
-		if (BoardUtil.isEmpty(square) == false){
+		if (BoardUtils.isEmpty(square) == false){
 			
 			//If the square contains a pusher
-			if (BoardUtil.isAPusher(square)){
+			if (BoardUtils.isAPusher(square)){
 				
-				if (BoardUtil.isWhite(square)){
+				if (BoardUtils.isWhite(square)){
 					listWhitePushers.remove(point);
 				} else {
 					listBlackPushers.remove(point);
@@ -221,15 +211,17 @@ public class Board {
 			//If the square contains a pushable	
 			} else {
 				
-				if (BoardUtil.isWhite(square)){
-					nbWhitePushables--;
+				if (BoardUtils.isWhite(square)){
+					listWhitePushables.remove(point);
+                    //nbWhitePushables--;
 				} else {
-					nbBlackPushables--;
+                    listBlackPushables.remove(point);
+					//nbBlackPushables--;
 				}
 				
 			}
 		
-			board[row][column] = BoardUtil.EMPTY;		
+			board[row][column] = BoardUtils.EMPTY;
 		}		
 	}
 
@@ -244,7 +236,7 @@ public class Board {
 			System.out.print(i+1);
 
 			for(int j = COLUMN_A; j <= COLUMN_H; j++){
-				System.out.print(" " + BoardUtil.stateToString(board[i][j]));
+				System.out.print(" " + BoardUtils.stateToString(board[i][j]));
 			}
 
 			//Identifies the lines
@@ -277,21 +269,35 @@ public class Board {
     public int calculateScore(boolean isWhite){
         int moveScore = 0;
         if(isWhite){
-            moveScore += calculatePushableScore();
+            moveScore += calculateWhitePushableScore();
             moveScore += calculateWhitePusher();
+            moveScore -= calculateBlackPushableScore();
             moveScore -= calculateBlackPusher();
-            //System.out.println("White:"+moveScore);
         }else{
-            moveScore -= calculatePushableScore();
+            moveScore -= calculateWhitePushableScore();
             moveScore -= calculateWhitePusher();
+            moveScore += calculateBlackPushableScore();
             moveScore += calculateBlackPusher();
-            //System.out.println("Black:"+moveScore);
         }
         return moveScore;
     }
 
-    private int calculatePushableScore(){
-        return this.getNbWPushables()*10 - this.getNbBPushables()*10;
+    private int calculateWhitePushableScore(){
+        int score = 0;
+        for (int i = 0; i< this.listWhitePushables.size(); i++){
+            Point tempPoint = this.listWhitePushables.get(i);
+            score += HeuristicUtils.PUSHABLE_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, true);
+        }
+        return score;
+    }
+
+    private int calculateBlackPushableScore(){
+        int score = 0;
+        for (int i = 0; i< this.listBlackPushables.size(); i++){
+            Point tempPoint = this.listBlackPushables.get(i);
+            score += HeuristicUtils.PUSHABLE_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, false);
+        }
+        return score;
     }
 
     private int calculateBlackPusher(){
@@ -299,9 +305,9 @@ public class Board {
         for (int i=0; i<this.listBlackPushers.size(); i++ ){
             Point tempPoint = this.listBlackPushers.get(i);
             //voir ce qui est autour de ce pusher
-            int kkk = this.board[tempPoint.x][tempPoint.y];
-            score += (Math.pow((7 - tempPoint.y),2)*10);
-            score += 100;
+            //int kkk = this.board[tempPoint.x][tempPoint.y];
+            //score += (Math.pow((7 - tempPoint.y),2)*10);
+            score += HeuristicUtils.PUSHER_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, false);
         }
         return score;
     }
@@ -310,8 +316,8 @@ public class Board {
         int score=0;
         for (int i=0; i<this.listWhitePushers.size(); i++ ){
             Point tempPoint = this.listWhitePushers.get(i);
-            score += (Math.pow(tempPoint.y,2)*10);
-            score += 100;
+            //score += (Math.pow(tempPoint.y,2)*10);
+            score += HeuristicUtils.PUSHER_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, false);
         }
         return score;
     }
