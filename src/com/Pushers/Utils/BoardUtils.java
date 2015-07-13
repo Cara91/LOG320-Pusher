@@ -19,6 +19,12 @@ public class BoardUtils {
 		return false;
 	}
 
+    public static boolean isAPushable(int state){
+        if(state == B_PUSHABLE || state == W_PUSHABLE)
+            return true;
+        return false;
+    }
+
 	public static boolean isWhite(int state){
 		if(state == W_PUSHER || state == W_PUSHABLE)
 			return true;

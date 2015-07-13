@@ -269,57 +269,36 @@ public class Board {
     public int calculateScore(boolean isWhite){
         int moveScore = 0;
         if(isWhite){
-            moveScore += calculateWhitePushableScore();
-            moveScore += calculateWhitePusher();
-            moveScore -= calculateBlackPushableScore();
-            moveScore -= calculateBlackPusher();
+            moveScore += calculatePushableScore(this.listWhitePushables, true);
+            moveScore += calculatePusherScore(this.listWhitePushers, true);
+            moveScore -= calculatePushableScore(this.listBlackPushables, false);
+            moveScore -= calculatePusherScore(this.listBlackPushers, false);
         }else{
-            moveScore -= calculateWhitePushableScore();
-            moveScore -= calculateWhitePusher();
-            moveScore += calculateBlackPushableScore();
-            moveScore += calculateBlackPusher();
+            moveScore += calculatePushableScore(this.listWhitePushables, true);
+            moveScore -= calculatePusherScore(this.listWhitePushers, false);
+            moveScore += calculatePushableScore(this.listBlackPushables, false);
+            moveScore += calculatePusherScore(this.listBlackPushers, false);
         }
         return moveScore;
     }
 
-    private int calculateWhitePushableScore(){
+    private int calculatePushableScore(List<Point> listPushable, boolean isWhite){
         int score = 0;
-        for (int i = 0; i< this.listWhitePushables.size(); i++){
-            Point tempPoint = this.listWhitePushables.get(i);
-            score += HeuristicUtils.PUSHABLE_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, true);
+        for (int i = 0; i< listPushable.size(); i++){
+            Point tempPoint = listPushable.get(i);
+            score += HeuristicUtils.PUSHABLE_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, isWhite);
+            score += HeuristicUtils.isBlocking(tempPoint.x, tempPoint.y, isWhite, this.board);
+            score += HeuristicUtils.ableToMove(tempPoint.x, tempPoint.y, isWhite, this.board);
         }
         return score;
     }
 
-    private int calculateBlackPushableScore(){
-        int score = 0;
-        for (int i = 0; i< this.listBlackPushables.size(); i++){
-            Point tempPoint = this.listBlackPushables.get(i);
-            score += HeuristicUtils.PUSHABLE_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, false);
-        }
-        return score;
-    }
-
-    private int calculateBlackPusher(){
+    private int calculatePusherScore(List<Point> listPushable, boolean isWhite){
         int score=0;
-        for (int i=0; i<this.listBlackPushers.size(); i++ ){
-            Point tempPoint = this.listBlackPushers.get(i);
-            //voir ce qui est autour de ce pusher
-            //int kkk = this.board[tempPoint.x][tempPoint.y];
-            //score += (Math.pow((7 - tempPoint.y),2)*10);
+        for (int i=0; i<listPushable.size(); i++ ){
+            Point tempPoint = listPushable.get(i);
             score += HeuristicUtils.PUSHER_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, false);
         }
         return score;
     }
-
-    private int calculateWhitePusher(){
-        int score=0;
-        for (int i=0; i<this.listWhitePushers.size(); i++ ){
-            Point tempPoint = this.listWhitePushers.get(i);
-            //score += (Math.pow(tempPoint.y,2)*10);
-            score += HeuristicUtils.PUSHER_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, false);
-        }
-        return score;
-    }
-
 }

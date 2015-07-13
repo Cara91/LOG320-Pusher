@@ -36,6 +36,57 @@ public class HeuristicUtils {
     private static final int ROW_7_BLACK_MULTIPLIER = 1;
     private static final int ROW_8_BLACK_MULTIPLIER = 0;
 
+    public static int ableToMove(int row, int column, boolean isWhite, int[][] board){
+        int score = 0;
+        if(row<7 && row>0) {
+            int behind = (isWhite ? -1 : 1);
+            int aHead = (isWhite ? 1 : -1);
+            int left = -1;
+            int right = 1;
+
+            if (BoardUtils.isAPusher(board[row + behind][column]) && notAFriendlyPiece(isWhite, board[row + aHead][column])) {
+                score += 100;
+            }
+
+            if (column != 0 && column != 7) {
+                if (BoardUtils.isAPusher(board[row + behind][column + right]) && notAFriendlyPiece(isWhite, board[row + aHead][column + left])) {
+                    score += 50;
+                }
+                if (BoardUtils.isAPusher(board[row + behind][column + left]) && notAFriendlyPiece(isWhite, board[row + aHead][column + right])) {
+                    score += 50;
+                }
+            }
+
+            if (score == 0) {
+                score = -9999;
+            }
+        }
+        return score;
+    }
+
+    private static boolean notAFriendlyPiece(boolean isWhite, int state){
+        if(isWhite){
+            if(BoardUtils.isEmpty(state) || !BoardUtils.isWhite(state)){
+                return true;
+            }
+        }else{
+            if(BoardUtils.isEmpty(state) || BoardUtils.isWhite(state)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int isBlocking(int row, int column, boolean isWhite, int[][] board){
+        if(row<7 && row>0) {
+            int aHead = (isWhite ? 1 : -1);
+            if (BoardUtils.isAPushable(board[row + aHead][column])) {
+                return 10;
+            }
+        }
+        return 0;
+    }
+
     public static int positionMultiplier(int row, int column, boolean isWhite){
         return columnMultiplier(column)*rowMultiplier(row, isWhite);
     }
