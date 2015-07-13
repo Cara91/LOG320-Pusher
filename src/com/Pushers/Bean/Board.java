@@ -274,8 +274,8 @@ public class Board {
             moveScore -= calculatePushableScore(this.listBlackPushables, false);
             moveScore -= calculatePusherScore(this.listBlackPushers, false);
         }else{
-            moveScore += calculatePushableScore(this.listWhitePushables, true);
-            moveScore -= calculatePusherScore(this.listWhitePushers, false);
+            moveScore -= calculatePushableScore(this.listWhitePushables, true);
+            moveScore -= calculatePusherScore(this.listWhitePushers, true);
             moveScore += calculatePushableScore(this.listBlackPushables, false);
             moveScore += calculatePusherScore(this.listBlackPushers, false);
         }
