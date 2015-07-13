@@ -21,18 +21,25 @@ public class Player {
     public Move getMoveFromMinMax(){
         Move move = new Move(0,0,0,0);
         boolean max = true;
+       
         return minMaxAlphaBeta(move, max, 0, -9999, 9999);
     }
 
     private Move minMaxAlphaBeta(Move move, boolean max, int depth, int alpha, int beta){
         if(depth == 4){
-            move.setScore(board.calculateScore(this.isWhite));
+        	//FIX TEMPORAIRE
+        	if(this.isWhite){
+        		move.setScore(board.calculateScore(true)); 
+        	}else{
+        		move.setScore(board.calculateScore(true)); 
+        	}
             return move;
         }
         if(max){
             //System.out.println("Max");
             Move maxMove = new Move(0,0,0,0, -9999);
             List<Move> moveList = getAllMoves(this.isWhite);
+            
             int actualAlpha = -9999;
             for (int i = 0; i < moveList.size(); i++){
                 Move tempMove = moveList.get(i);
@@ -60,6 +67,7 @@ public class Player {
             //System.out.println("Min");
             Move minMove = new Move(0,0,0,0, 9999);
             List<Move> moveList = getAllMoves(!this.isWhite);
+               
             int actualBeta = 9999;
             for (int i = 0; i < moveList.size(); i++){
                 Move tempMove = moveList.get(i);
@@ -88,6 +96,7 @@ public class Player {
 	public List<Move> getAllMoves(boolean isWhite){
 		List<Move> moveList = new ArrayList<Move>();
         List<Point> pusherList;
+
 		if(isWhite) {
             pusherList = board.getListWPushers();
         }else{
@@ -106,6 +115,7 @@ public class Player {
 				}
 			}
 		}
+		
 		return moveList;
 	}
     //checker move pour si on est au bout
