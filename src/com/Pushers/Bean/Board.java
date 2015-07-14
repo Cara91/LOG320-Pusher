@@ -289,6 +289,7 @@ public class Board {
             score += HeuristicUtils.PUSHABLE_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, isWhite);
             score += HeuristicUtils.isBlocking(tempPoint.x, tempPoint.y, isWhite, this.board);
             score += HeuristicUtils.ableToMove(tempPoint.x, tempPoint.y, isWhite, this.board);
+            score+=100;
         }
         return score;
     }

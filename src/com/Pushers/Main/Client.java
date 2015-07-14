@@ -45,7 +45,7 @@ class Client {
 				player = new Player(board, true);
 
                 Move move = player.getMoveFromMinMax();
-
+                System.out.println(move.toString());
                 String moveString = move.toString();
 				output.write(moveString.getBytes(),0,moveString.length());
 				output.flush();
@@ -83,6 +83,7 @@ class Client {
 
                 System.out.println("Entrez votre coup : ");
                 Move move = player.getMoveFromMinMax();
+                System.out.println(move.toString());
 				String moveString = move.toString();
 				output.write(moveString.getBytes(), 0, moveString.length());
 				output.flush();

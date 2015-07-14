@@ -21,7 +21,7 @@ public class Player {
     public Move getMoveFromMinMax(){
         Move move = new Move(0,0,0,0);
         boolean max = true;
-        return minMaxAlphaBeta(move, max, 0, -9999, 9999);
+        return minMaxAlphaBeta(move, max, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     private Move minMaxAlphaBeta(Move move, boolean max, int depth, int alpha, int beta){
@@ -31,9 +31,9 @@ public class Player {
         }
         if(max){
             //System.out.println("Max");
-            Move maxMove = new Move(0,0,0,0, -9999);
+            Move maxMove = new Move(0,0,0,0, Integer.MIN_VALUE);
             List<Move> moveList = getAllMoves(this.isWhite);
-            int actualAlpha = -9999;
+            int actualAlpha = Integer.MIN_VALUE;
             for (int i = 0; i < moveList.size(); i++){
                 Move tempMove = moveList.get(i);
                 int stateTo = this.board.getSquareState(tempMove.getToRow(), tempMove.getToColumn());
@@ -58,9 +58,9 @@ public class Player {
             return maxMove;
         }else {
             //System.out.println("Min");
-            Move minMove = new Move(0,0,0,0, 9999);
+            Move minMove = new Move(0,0,0,0, Integer.MAX_VALUE);
             List<Move> moveList = getAllMoves(!this.isWhite);
-            int actualBeta = 9999;
+            int actualBeta = Integer.MAX_VALUE;
             for (int i = 0; i < moveList.size(); i++){
                 Move tempMove = moveList.get(i);
                 int stateTo = this.board.getSquareState(tempMove.getToRow(), tempMove.getToColumn());
