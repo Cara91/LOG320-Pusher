@@ -18,10 +18,10 @@ public class HeuristicUtils {
     private static final int COLUMN_G_MULTIPLIER = 8;
     private static final int COLUMN_H_MULTIPLIER = 10;
 
-    private static final int ROW_1_WHITE_MULTIPLIER = 0;
-    private static final int ROW_2_WHITE_MULTIPLIER = 1;
-    private static final int ROW_3_WHITE_MULTIPLIER = 2;
-    private static final int ROW_4_WHITE_MULTIPLIER = 3;
+    private static final int ROW_1_WHITE_MULTIPLIER = 8;
+    private static final int ROW_2_WHITE_MULTIPLIER = 6;
+    private static final int ROW_3_WHITE_MULTIPLIER = 4;
+    private static final int ROW_4_WHITE_MULTIPLIER = 4;
     private static final int ROW_5_WHITE_MULTIPLIER = 4;
     private static final int ROW_6_WHITE_MULTIPLIER = 6;
     private static final int ROW_7_WHITE_MULTIPLIER = 8;
@@ -31,10 +31,10 @@ public class HeuristicUtils {
     private static final int ROW_2_BLACK_MULTIPLIER = 8;
     private static final int ROW_3_BLACK_MULTIPLIER = 6;
     private static final int ROW_4_BLACK_MULTIPLIER = 4;
-    private static final int ROW_5_BLACK_MULTIPLIER = 3;
-    private static final int ROW_6_BLACK_MULTIPLIER = 2;
-    private static final int ROW_7_BLACK_MULTIPLIER = 1;
-    private static final int ROW_8_BLACK_MULTIPLIER = 0;
+    private static final int ROW_5_BLACK_MULTIPLIER = 4;
+    private static final int ROW_6_BLACK_MULTIPLIER = 4;
+    private static final int ROW_7_BLACK_MULTIPLIER = 6;
+    private static final int ROW_8_BLACK_MULTIPLIER = 8;
 
     public static int ableToMove(int row, int column, boolean isWhite, int[][] board){
         int score = 0;
