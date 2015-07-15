@@ -289,7 +289,7 @@ public class Board {
             score += HeuristicUtils.PUSHABLE_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, isWhite);
             score += HeuristicUtils.isBlocking(tempPoint.x, tempPoint.y, isWhite, this.board);
             score += HeuristicUtils.ableToMove(tempPoint.x, tempPoint.y, isWhite, this.board);
-            score+=100;
+            score += HeuristicUtils.canEat(tempPoint.x, tempPoint.y, isWhite, this.board, false);
         }
         return score;
     }
@@ -298,7 +298,8 @@ public class Board {
         int score=0;
         for (int i=0; i<listPushable.size(); i++ ){
             Point tempPoint = listPushable.get(i);
-            score += HeuristicUtils.PUSHER_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, false);
+            score += HeuristicUtils.PUSHER_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, isWhite);
+            score += HeuristicUtils.canEat(tempPoint.x, tempPoint.y, isWhite, this.board, true);
         }
         return score;
     }

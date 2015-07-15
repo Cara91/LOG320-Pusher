@@ -36,6 +36,111 @@ public class HeuristicUtils {
     private static final int ROW_7_BLACK_MULTIPLIER = 1;
     private static final int ROW_8_BLACK_MULTIPLIER = 0;
 
+    public static int canEat(int row, int column, boolean isWhite, int[][] board, boolean isPusher){
+        int score = 0;
+        int behind = (isWhite ? -1 : 1);
+        int aHead = (isWhite ? 1 : -1);
+        int left = -1;
+        int right = 1;
+        if((row == 0 && !isWhite) || (row == 7 && isWhite)) {
+            if (!isPusher) {
+                if (notAFriendlyPieceAndNotEmpty(isWhite, board[row + aHead][column]) && BoardUtils.isAPusher(board[row + behind][column]) && !notAFriendlyPieceAndNotEmpty(isWhite, board[row + behind][column])) {
+                    score += 50;
+                }
+                if (column != 0 && column != 7) {
+                    if (notAFriendlyPieceAndNotEmpty(isWhite, board[row + aHead][column + left]) && BoardUtils.isAPusher(board[row + behind][column + right]) && !notAFriendlyPieceAndNotEmpty(isWhite, board[row + behind][column + right])) {
+                        score += 50;
+                    }
+                    if (notAFriendlyPieceAndNotEmpty(isWhite, board[row + aHead][column + right]) && BoardUtils.isAPusher(board[row + behind][column + left]) && !notAFriendlyPieceAndNotEmpty(isWhite, board[row + behind][column + left])) {
+                        score += 50;
+                    }
+                }
+            } else {
+                if (notAFriendlyPieceAndNotEmpty(isWhite, board[row + aHead][column])) {
+                    score += 50;
+                }
+                if (column == 0) {
+                    if (notAFriendlyPieceAndNotEmpty(isWhite, board[row + aHead][column + right])) {
+                        score += 50;
+                    }
+                } else if (column == 7) {
+                    if (notAFriendlyPieceAndNotEmpty(isWhite, board[row + aHead][column + left])) {
+                        score += 50;
+                    }
+                } else {
+                    if (notAFriendlyPieceAndNotEmpty(isWhite, board[row + aHead][column + left])) {
+                        score += 50;
+                    }
+                    if (notAFriendlyPieceAndNotEmpty(isWhite, board[row + aHead][column + right])) {
+                        score += 50;
+                    }
+                }
+            }
+        }
+        return score;
+    }
+
+    public static int canBeEat(int row, int column, boolean isWhite, int[][] board, boolean isPusher){
+        int score = 0;
+        if((row == 0 && !isWhite) || (row == 7 && isWhite)) {
+            if(isPusher){
+                if(canBeEatOnTheLeft(row, column, board, isWhite)){
+                    score += -5000;
+                }
+                if(canBeEatOnTheRight(row, column, board, isWhite)){
+                    score += -5000;
+                }
+            }else{
+                if(canBeEatOnTheLeft(row, column, board, isWhite)){
+                    score += -1000;
+                }
+                if(canBeEatOnTheRight(row, column, board, isWhite)){
+                    score += -1000;
+                }
+            }
+        }
+        return score;
+    }
+
+    private static boolean canBeEatOnTheLeft(int row, int column, int[][] board, boolean isWhite){
+        int furtherAHead = (isWhite ? -2 : 2);
+        int aHead = (isWhite ? 1 : -1);
+        int left = -1;
+        int furtherLeft = -2;
+        if (column == 0) {
+            return false;
+        } else if (column == 1) {
+            if(notAFriendlyPieceAndNotEmpty(isWhite, board[row+aHead][column+left]) && BoardUtils.isAPusher(board[row+aHead][column+left])){
+                return true;
+            }
+        }else{
+            if(notAFriendlyPieceAndNotEmpty(isWhite, board[row+aHead][column+left])){
+                if(BoardUtils.isAPusher(board[row+aHead][column+left])){
+                    return true;
+                }else{
+                    if(BoardUtils.isAPusher(board[row+furtherAHead][column+furtherLeft])){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean canBeEatOnTheRight(int row, int column, int[][] board, boolean isWhite){
+        int furtherAHead = (isWhite ? -2 : 2);
+        int aHead = (isWhite ? 1 : -1);
+        int right = 1;
+        int furtherRight = 2;
+        return false;
+    }
+
+
+    /*
+    Peut-etre a revoir puisqu'elle fait literallement ce le nom de la fonction
+
+    si il y a un pusher plus loin qui peut le bouger la fonction retourn -9999
+     */
     public static int ableToMove(int row, int column, boolean isWhite, int[][] board){
         int score = 0;
         if(row<7 && row>0) {
@@ -71,6 +176,19 @@ public class HeuristicUtils {
             }
         }else{
             if(BoardUtils.isEmpty(state) || BoardUtils.isWhite(state)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean notAFriendlyPieceAndNotEmpty(boolean isWhite, int state){
+        if(isWhite){
+            if(!BoardUtils.isEmpty(state) || !BoardUtils.isWhite(state)){
+                return true;
+            }
+        }else{
+            if(!BoardUtils.isEmpty(state) || BoardUtils.isWhite(state)){
                 return true;
             }
         }
