@@ -311,6 +311,8 @@ public class Board {
             moveScore -= calculatePusherScore(this.listBlackPushers, false);
             if(moveScore > 10000){
             	return Integer.MAX_VALUE;
+            } else if(moveScore < -10000){
+            	return Integer.MIN_VALUE;
             }
             moveScore *= ((this.listWhitePushers.size() + 1) * 3);
             moveScore /= ((this.listBlackPushers.size() + 1) * 3);
@@ -323,6 +325,8 @@ public class Board {
             moveScore += calculatePusherScore(this.listBlackPushers, false);
             if(moveScore > 10000){
             	return Integer.MAX_VALUE;
+            } else if(moveScore < -10000){
+            	return Integer.MIN_VALUE;
             }
             moveScore *= ((this.listBlackPushers.size() + 1) * 3);
             moveScore /= ((this.listWhitePushers.size() + 1) * 3);

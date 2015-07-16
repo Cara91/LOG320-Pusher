@@ -28,12 +28,13 @@ public class Player {
         	Move aMove = minMaxAlphaBeta(bestMove, max, 0, maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
             if(aMove == null){
+            	System.out.println("Depth: " + maxDepth);
             	return bestMove;
             } else {
             	bestMove = aMove;
             }
             
-            if(bestMove.getScore() == Integer.MAX_VALUE){
+            if(bestMove.getScore() == Integer.MAX_VALUE || bestMove.getScore() == Integer.MIN_VALUE){
             	return bestMove;
             }
 
