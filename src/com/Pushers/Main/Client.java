@@ -7,8 +7,6 @@ import com.Pushers.Utils.MoveUtils;
 
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 class Client {
@@ -17,20 +15,17 @@ class Client {
 	Socket MyClient;
 	BufferedInputStream input;
 	BufferedOutputStream output;
-    int[][] boardTable = new int[8][8];
     
     Player player = null;
 	Board board = null;
-	List<Move> moveList;
 	
 	try {
 		MyClient = new Socket("localhost", 8888);
 	   	input    = new BufferedInputStream(MyClient.getInputStream());
 		output   = new BufferedOutputStream(MyClient.getOutputStream());
-		BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
         long start;
-        long end=0;
-        while(1 == 1){
+        long end = 0;
+        while(true){
 
 			char cmd = 0;
 		   	
@@ -38,6 +33,7 @@ class Client {
             start = System.currentTimeMillis();
             // Debut de la partie en joueur blanc
             if(cmd == '1'){
+                System.out.println("Vous jouez les blancs");
                 byte[] aBuffer = new byte[1024];
 				int size = input.available();
 				input.read(aBuffer,0,size);
@@ -45,7 +41,7 @@ class Client {
 				player = new Player(board, true);
 
                 Move move = player.getMoveFromMinMax();
-                System.out.println(move.toString());
+                System.out.println("Move: " + move.toString() + ", Points: " + move.getScore());
                 String moveString = move.toString();
 				output.write(moveString.getBytes(),0,moveString.length());
 				output.flush();
@@ -55,7 +51,7 @@ class Client {
             }
 
             if(cmd == '2'){
-                System.out.println("Nouvelle partie! Vous jouer noir, attendez le coup des blancs");
+                System.out.println("Vous jouez les noirs");
                 byte[] aBuffer = new byte[1024];
 				int size = input.available();
 				input.read(aBuffer,0,size);
@@ -72,7 +68,7 @@ class Client {
 				input.read(aBuffer,0,size);
 
 				String moveStringServer = new String(aBuffer);
-				System.out.println("Dernier coup : "+ moveStringServer);
+				//System.out.println("Dernier coup : "+ moveStringServer);
 
                 Move serverMove = new Move(MoveUtils.getRowNumber(Integer.valueOf(moveStringServer.substring(2,3))),
                                            MoveUtils.getColumnNumber(moveStringServer.charAt(1)),
@@ -81,9 +77,9 @@ class Client {
                 board.movePiece(serverMove);
 
 
-                System.out.println("Entrez votre coup : ");
+                //System.out.println("Entrez votre coup : ");
                 Move move = player.getMoveFromMinMax();
-                System.out.println(move.toString());
+                System.out.println("Move: " + move.toString() + ", Points: " + move.getScore());
 				String moveString = move.toString();
 				output.write(moveString.getBytes(), 0, moveString.length());
 				output.flush();
@@ -108,11 +104,18 @@ class Client {
 				int toColumn = moveList.get(random).getToColumn();
 				board.movePiece(moveList.get(random));
 				*/
+				
+				System.out.println("Coup invalide");
+				
 			}
+			
             end = System.currentTimeMillis();
 
-			board.printBoard();
-            System.out.println("Turn time: "+(end-start)+"ms");
+			//board.printBoard();
+            System.out.println("X: " + board.getNbBPushers() +
+            				   ", x: " + board.getNbBPushables() +
+            				   ", o: " + board.getNbWPushables() +
+            				   ", O: " + board.getNbWPushers());
         }
 	}
 	catch (IOException e) {

@@ -11,6 +11,7 @@ public class Player {
 
 	private Board board;
 	private boolean isWhite;
+	long turnStart = 0;
 
 	public Player(Board board, boolean isWhite){
 
@@ -19,13 +20,35 @@ public class Player {
 	}
 
     public Move getMoveFromMinMax(){
-        Move move = new Move(0,0,0,0);
+        turnStart = System.currentTimeMillis();
+        Move bestMove = new Move(0,0,0,0);
+        int maxDepth = 1;
         boolean max = true;
-        return minMaxAlphaBeta(move, max, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        while(true){
+        	Move aMove = minMaxAlphaBeta(bestMove, max, 0, maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+            if(aMove == null){
+            	return bestMove;
+            } else {
+            	bestMove = aMove;
+            }
+            
+            if(bestMove.getScore() == Integer.MAX_VALUE){
+            	return bestMove;
+            }
+
+            //System.out.println("Depth: " + maxDepth);
+            maxDepth ++;
+        }
+        
     }
 
-    private Move minMaxAlphaBeta(Move move, boolean max, int depth, int alpha, int beta){
-        if(depth == 4){
+    private Move minMaxAlphaBeta(Move move, boolean max, int depth, int maxDepth, int alpha, int beta){
+        if(System.currentTimeMillis() - turnStart > 4990){
+        	return null;
+        }
+    	
+    	if(depth == maxDepth){
             move.setScore(board.calculateScore(this.isWhite));
             return move;
         }
@@ -39,8 +62,13 @@ public class Player {
                 int stateTo = this.board.getSquareState(tempMove.getToRow(), tempMove.getToColumn());
                 int stateFrom = this.board.getSquareState(tempMove.getFromRow(), tempMove.getFromColumn());
                 this.board.movePiece(tempMove);
-
-                tempMove.setScore(minMaxAlphaBeta(moveList.get(i), false, depth + 1,Math.max(actualAlpha, alpha), beta).getScore());
+                
+                Move nextMove = minMaxAlphaBeta(moveList.get(i), false, depth + 1, maxDepth, Math.max(actualAlpha, alpha), beta);
+                if(nextMove == null){
+                	this.board.undoMove(tempMove, stateFrom, stateTo);
+                	return null;
+                }
+                tempMove.setScore(nextMove.getScore());
                 //System.out.println("max:"+maxMove.getScore()+" | current:"+minMove.getScore());
                 if(maxMove.compareTo(tempMove) == -1){
                     //System.out.println("Changed Max to:"+tempMove.getScore());
@@ -66,8 +94,14 @@ public class Player {
                 int stateTo = this.board.getSquareState(tempMove.getToRow(), tempMove.getToColumn());
                 int stateFrom = this.board.getSquareState(tempMove.getFromRow(), tempMove.getFromColumn());
                 this.board.movePiece(tempMove);
+                
+                Move nextMove = minMaxAlphaBeta(moveList.get(i), true, depth + 1, maxDepth, alpha, Math.min(actualBeta, beta));
+                if(nextMove == null){
+                	this.board.undoMove(tempMove, stateFrom, stateTo);
+                	return null;
+                }
 
-                tempMove.setScore(minMaxAlphaBeta(moveList.get(i), true, depth + 1,alpha, Math.min(actualBeta, beta)).getScore());
+                tempMove.setScore(nextMove.getScore());
                 //System.out.println("min:"+minMove.getScore()+" | current:"+maxMove.getScore());
                 if(minMove.compareTo(tempMove) == 1){
                     //System.out.println("Changed Min to:"+tempMove.getScore());

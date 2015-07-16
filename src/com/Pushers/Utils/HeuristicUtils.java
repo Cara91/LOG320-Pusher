@@ -6,35 +6,35 @@ import com.Pushers.Bean.Board;
  * Created by Gabriel on 2015-07-12.
  */
 public class HeuristicUtils {
-    public static final int PUSHER_VALUE = 10;
-    public static final int PUSHABLE_VALUE = 5;
+    public static final int PUSHER_VALUE = 2;
+    public static final int PUSHABLE_VALUE = 1;
 
-    private static final int COLUMN_A_MULTIPLIER = 10;
-    private static final int COLUMN_B_MULTIPLIER = 8;
-    private static final int COLUMN_C_MULTIPLIER = 6;
-    private static final int COLUMN_D_MULTIPLIER = 4;
-    private static final int COLUMN_E_MULTIPLIER = 4;
-    private static final int COLUMN_F_MULTIPLIER = 6;
-    private static final int COLUMN_G_MULTIPLIER = 8;
-    private static final int COLUMN_H_MULTIPLIER = 10;
+    private static final int COLUMN_A_MULTIPLIER = 4;
+    private static final int COLUMN_B_MULTIPLIER = 3;
+    private static final int COLUMN_C_MULTIPLIER = 2;
+    private static final int COLUMN_D_MULTIPLIER = 2;
+    private static final int COLUMN_E_MULTIPLIER = 2;
+    private static final int COLUMN_F_MULTIPLIER = 2;
+    private static final int COLUMN_G_MULTIPLIER = 3;
+    private static final int COLUMN_H_MULTIPLIER = 4;
 
-    private static final int ROW_1_WHITE_MULTIPLIER = 8;
-    private static final int ROW_2_WHITE_MULTIPLIER = 6;
-    private static final int ROW_3_WHITE_MULTIPLIER = 4;
+    private static final int ROW_1_WHITE_MULTIPLIER = 4;
+    private static final int ROW_2_WHITE_MULTIPLIER = 3;
+    private static final int ROW_3_WHITE_MULTIPLIER = 2;
     private static final int ROW_4_WHITE_MULTIPLIER = 4;
-    private static final int ROW_5_WHITE_MULTIPLIER = 4;
-    private static final int ROW_6_WHITE_MULTIPLIER = 6;
-    private static final int ROW_7_WHITE_MULTIPLIER = 8;
-    private static final int ROW_8_WHITE_MULTIPLIER = 1000;
+    private static final int ROW_5_WHITE_MULTIPLIER = 6;
+    private static final int ROW_6_WHITE_MULTIPLIER = 10;
+    private static final int ROW_7_WHITE_MULTIPLIER = 100;
+    private static final int ROW_8_WHITE_MULTIPLIER = 10000;
 
-    private static final int ROW_1_BLACK_MULTIPLIER = 1000;
-    private static final int ROW_2_BLACK_MULTIPLIER = 8;
-    private static final int ROW_3_BLACK_MULTIPLIER = 6;
-    private static final int ROW_4_BLACK_MULTIPLIER = 4;
+    private static final int ROW_1_BLACK_MULTIPLIER = 10000;
+    private static final int ROW_2_BLACK_MULTIPLIER = 100;
+    private static final int ROW_3_BLACK_MULTIPLIER = 10;
+    private static final int ROW_4_BLACK_MULTIPLIER = 6;
     private static final int ROW_5_BLACK_MULTIPLIER = 4;
-    private static final int ROW_6_BLACK_MULTIPLIER = 4;
-    private static final int ROW_7_BLACK_MULTIPLIER = 6;
-    private static final int ROW_8_BLACK_MULTIPLIER = 8;
+    private static final int ROW_6_BLACK_MULTIPLIER = 2;
+    private static final int ROW_7_BLACK_MULTIPLIER = 3;
+    private static final int ROW_8_BLACK_MULTIPLIER = 4;
 
     public static int ableToMove(int row, int column, boolean isWhite, int[][] board){
         int score = 0;
@@ -45,20 +45,16 @@ public class HeuristicUtils {
             int right = 1;
 
             if (BoardUtils.isAPusher(board[row + behind][column]) && notAFriendlyPiece(isWhite, board[row + aHead][column])) {
-                score += 100;
+                score += 2;
             }
 
             if (column != 0 && column != 7) {
                 if (BoardUtils.isAPusher(board[row + behind][column + right]) && notAFriendlyPiece(isWhite, board[row + aHead][column + left])) {
-                    score += 50;
+                    score += 1;
                 }
                 if (BoardUtils.isAPusher(board[row + behind][column + left]) && notAFriendlyPiece(isWhite, board[row + aHead][column + right])) {
-                    score += 50;
+                    score += 1;
                 }
-            }
-
-            if (score == 0) {
-                score = -9999;
             }
         }
         return score;
@@ -81,7 +77,7 @@ public class HeuristicUtils {
         if(row<7 && row>0) {
             int aHead = (isWhite ? 1 : -1);
             if (BoardUtils.isAPushable(board[row + aHead][column])) {
-                return 10;
+                return 1;
             }
         }
         return 0;
@@ -159,4 +155,5 @@ public class HeuristicUtils {
                 return 0;
         }
     }
+    
 }

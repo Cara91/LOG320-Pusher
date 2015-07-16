@@ -117,6 +117,24 @@ public class Board {
 	}
 	
 	/**
+	 * Returns the number of black pushables on the board
+	 * 
+	 * @return	The number of black pushables
+	 */
+	public int getNbBPushables(){
+		return listBlackPushables.size();
+	}
+	
+	/**
+	 * Returns the number of white pushables on the board
+	 * 
+	 * @return	The number of white pushables
+	 */
+	public int getNbWPushables(){
+		return listWhitePushables.size();
+	}
+	
+	/**
 	 * Returns a copy of the list containing the positions of every black pushers 
 	 * 
 	 * @return	A copy of the list
@@ -132,6 +150,24 @@ public class Board {
 	 */
 	public List<Point> getListWPushers(){
 		return listWhitePushers;
+	}
+	
+	/**
+	 * Returns a copy of the list containing the positions of every black pushables 
+	 * 
+	 * @return	A copy of the list
+	 */
+	public List<Point> getListBPushables(){
+		return listBlackPushables;
+	}
+	
+	/**
+	 * Returns a copy of the list containing the positions of every white pushables 
+	 * 
+	 * @return	A copy of the list
+	 */
+	public List<Point> getListWPushables(){
+		return listWhitePushables;
 	}
 
     public void setBoard(int[][] board){
@@ -273,32 +309,46 @@ public class Board {
             moveScore += calculatePusherScore(this.listWhitePushers, true);
             moveScore -= calculatePushableScore(this.listBlackPushables, false);
             moveScore -= calculatePusherScore(this.listBlackPushers, false);
+            if(moveScore > 10000){
+            	return Integer.MAX_VALUE;
+            }
+            moveScore *= ((this.listWhitePushers.size() + 1) * 3);
+            moveScore /= ((this.listBlackPushers.size() + 1) * 3);
+            moveScore *= (this.listWhitePushables.size() + 1);
+            moveScore /= (this.listBlackPushables.size() + 1);
         }else{
             moveScore -= calculatePushableScore(this.listWhitePushables, true);
             moveScore -= calculatePusherScore(this.listWhitePushers, true);
             moveScore += calculatePushableScore(this.listBlackPushables, false);
             moveScore += calculatePusherScore(this.listBlackPushers, false);
+            if(moveScore > 10000){
+            	return Integer.MAX_VALUE;
+            }
+            moveScore *= ((this.listBlackPushers.size() + 1) * 3);
+            moveScore /= ((this.listWhitePushers.size() + 1) * 3);
+            moveScore *= (this.listBlackPushers.size() + 1);
+            moveScore /= (this.listWhitePushers.size() + 1);
         }
         return moveScore;
     }
 
-    private int calculatePushableScore(List<Point> listPushable, boolean isWhite){
+    private int calculatePushableScore(List<Point> list, boolean isWhite){
         int score = 0;
-        for (int i = 0; i< listPushable.size(); i++){
-            Point tempPoint = listPushable.get(i);
+        for (int i = 0; i< list.size(); i++){
+            Point tempPoint = list.get(i);
             score += HeuristicUtils.PUSHABLE_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, isWhite);
-            score += HeuristicUtils.isBlocking(tempPoint.x, tempPoint.y, isWhite, this.board);
-            score += HeuristicUtils.ableToMove(tempPoint.x, tempPoint.y, isWhite, this.board);
-            score+=100;
+            //score += HeuristicUtils.isBlocking(tempPoint.x, tempPoint.y, isWhite, this.board);
+            //score += HeuristicUtils.ableToMove(tempPoint.x, tempPoint.y, isWhite, this.board);
+            //score+=100;
         }
         return score;
     }
 
-    private int calculatePusherScore(List<Point> listPushable, boolean isWhite){
+    private int calculatePusherScore(List<Point> list, boolean isWhite){
         int score=0;
-        for (int i=0; i<listPushable.size(); i++ ){
-            Point tempPoint = listPushable.get(i);
-            score += HeuristicUtils.PUSHER_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, false);
+        for (int i=0; i<list.size(); i++ ){
+            Point tempPoint = list.get(i);
+            score += HeuristicUtils.PUSHER_VALUE*HeuristicUtils.positionMultiplier(tempPoint.x, tempPoint.y, isWhite);
         }
         return score;
     }
